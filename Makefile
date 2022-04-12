@@ -12,3 +12,9 @@ down:
 .PHONY: up
 up:
 	$(service-up-compose) up -d
+
+# building PNGs from PUMLs
+png: plantuml.jar docs/uml/*.png move.png
+
+generate-all:
+	find ./docs -name "*.puml" | xargs java -jar plantuml.jar {}

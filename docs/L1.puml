@@ -1,0 +1,24 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+!include <aws/common>
+!include <aws/Database/AmazonRDS/AmazonRDS>
+!include <aws/Messaging/AmazonSNS/AmazonSNS>
+!include <aws/Messaging/AmazonSQS/AmazonSQS>
+
+Person(client, "Client McClientface", "Real user; makes reservation before coming to the parking")
+Person(parkinggate, "Parky McParkface", "Parking gate talking; it makes a reservation by scanning the licence plates")
+Person(paymentterminal, "Payment McPayface", "Payment terminal; responsible for ad-hoc payment processing")
+System(carparkpro, "Carpark Pro", "System responsible for parking management")
+System_Ext(notification, "Notifications system", "System responsible for communication with users")
+System_Ext(payment, "Payment system", "System for payment processing")
+
+Rel(paymentterminal, carparkpro, "https","charges ad-hoc users for the parking time")
+Rel(carparkpro, payment, "Payment system","Charges user for the parking time")
+Rel(client, carparkpro, "https","talks to the system to book a parking spot")
+Rel(parkinggate, carparkpro, "https","talk to the system to book by scanning the licence plates")
+Rel(carparkpro, notification, "async","sends events for users")
+Rel(notification, client, "https","notifies users about e.g. free parking spots")
+
+@enduml

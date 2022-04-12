@@ -1,0 +1,37 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+!include <aws/common>
+!include <aws/Database/AmazonRDS/AmazonRDS>
+!include <aws/Messaging/AmazonSNS/AmazonSNS>
+!include <aws/Messaging/AmazonSQS/AmazonSQS>
+
+Person(client, "Client McClientface", "Real user; makes reservation before coming to the parking")
+Person(parkinggate, "Parky McParkface", "Parking gate; responsible for ad-hoc parking spot booking")
+Person(paymentterminal, "Payment McPayface", "Payment terminal; responsible for ad-hoc payment processing")
+System_Boundary(c1, "carparkpro"){
+    Container(android, "Android App", "provides the interface to the user")
+    Container(api, "Api Gateyway","api entry point to the system")
+    Container(booking_service, "Booking service","Kotlin/Spring Boot","responsible for the core functionality")
+    Container(payment_service, "Payment service","Kotlin/Spring Boot","service responsible for payment processing")
+    Container(notification_service, "Notification service","Kotlin/Spring Boot", "service responsible for triggering the notification sending to the client")
+    ContainerDb(payment_db, "Payment service DB","Postgres")
+    ContainerDb(booking_db, "Booking service DB","Postgres")
+}
+System_Ext(notification, "Notifications system", "System responsible for communication with users")
+System_Ext(payment, "Payment system", "System for payment processing")
+
+Rel(booking_service, booking_db, "reads and writes to the db", "jdbc")
+Rel(payment_service, payment_db, "reads and writes to the db", "jdbc")
+Rel(client, android,"users the app to interact with the system","https")
+Rel(parkinggate, api, "talk directly to the api","https")
+Rel(paymentterminal, api, "talk directly to the api","https")
+Rel(api, booking_service, "makes requests to via", "https")
+Rel(android, api,"talk to api to get the things done", "https")
+Rel(booking_service, payment_service,  "sends requests to process payment", "async")
+Rel(booking_service, notification_service, "sends requests to process payment", "async")
+Rel(payment_service, payment, "uses 3rd party system","https")
+Rel(notification_service, notification, "uses 3rd party system","https")
+
+@enduml

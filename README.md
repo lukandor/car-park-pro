@@ -13,3 +13,27 @@ scanned on entry, if the parking spot will be free, and the client will have to 
 
 People can book a spot straight away if it's free or should be notified if any of the parking spots in the area of their choice will be free.
 
+### Analysis
+What does the system do? 
+
+Core:
+- let the client book the spot for some period of time
+- process payments for the booking
+
+Gate:
+- verifies at the gate the reservation was made by scanning the licence plate
+- if reservation was not made beforehand, it checks if there are free parking spots and, if yes, binds the licence place with the spot; when the client wants to leave, it prompts the client for the phonenumber and let the user pay  
+- keeps track of the available parking spots
+
+Payment terminal:
+- payment terminals process payments for ad-hoc users
+
+Notifications:
+- notifies user when the parking is about to expire
+- notifies user when there is a parking spot in the interested area/parking lot
+
+### System architecture (C4 diagrams)
+
+![L1 diagram](./docs/L1.png "L1")
+![L2 diagram](./docs/L2.png "L2")
+
