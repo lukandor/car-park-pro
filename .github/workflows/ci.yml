@@ -9,9 +9,9 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-
+      - name: Setup Containers
+        run: docker-compose up -d
       - name: Execute Gradle build
         run: ./gradlew build
