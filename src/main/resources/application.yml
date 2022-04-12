@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: "jdbc:postgresql://localhost:5432/carpark"
+    username: carparkuser
+    hikari:
+      maximum-pool-size: 50
+  flyway:
+    user: carparkuser
+    schemas: carpark
+    connect-retries: 2
+    password: carparkpassword
+
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-components: always
+  metrics:
+    export:
+      newrelic:
+        api-key: someapikey
+        account-id: someaccountid

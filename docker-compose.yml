@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  carparkdb:
+    image: postgres
+    container_name: carparkdb
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=carparkpassword
+      - POSTGRES_USER=carparkuser
+      - POSTGRES_DB=carpark
